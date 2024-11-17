@@ -38,9 +38,9 @@
       List<SubjectVO> list;
 
       if (searchTerm != null && !searchTerm.isEmpty()) {
-        list = dao.list(searchTerm); // 검색어가 있을 때
+        list = dao.list(searchTerm);
       } else {
-        list = dao.list(); // 검색어가 없을 때 모든 과목 조회
+        list = dao.list();
       }
 
       for (SubjectVO vo : list) {

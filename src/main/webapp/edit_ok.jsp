@@ -35,11 +35,11 @@
   subject.setClassRoom(classRoom);
   subject.setGrade(type);
 
-  int result = dao.update(subject); // 업데이트된 행 수를 반환
+  int result = dao.update(subject);
 
   // 결과 페이지로 리다이렉트
-  if (result > 0) { // 업데이트된 행이 1개 이상이면 성공
-    response.sendRedirect("list.jsp"); // 수정 성공 시 목록 페이지로 이동
+  if (result > 0) {
+    response.sendRedirect("list.jsp");
   } else {
     out.println("<h3>수정 실패. 다시 시도해주세요.</h3>");
   }

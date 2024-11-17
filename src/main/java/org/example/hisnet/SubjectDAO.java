@@ -40,7 +40,7 @@ public class SubjectDAO {
 
 
     public List<SubjectVO> list() {
-        return list(null); // 검색어가 없을 때 모든 과목을 반환
+        return list(null);
     }
 
     public List<SubjectVO> list(String searchTerm) {
@@ -70,7 +70,6 @@ public class SubjectDAO {
                 subject.setClassTime(rs.getString("classTime"));
                 subject.setClassRoom(rs.getString("classRoom"));
                 subject.setGrade(rs.getString("grade"));
-                // subject.setReEnrollment(rs.getBoolean("reEnrollment")); // 재수강 관련 필드 주석 처리
                 subjectList.add(subject);
             }
         } catch (SQLException e) {
