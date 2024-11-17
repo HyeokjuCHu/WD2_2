@@ -8,6 +8,12 @@
 
 <div class="container">
   <h1>과목 목록</h1>
+
+  <form action="list.jsp" method="get" class="search-form">
+    <input type="text" name="searchTerm" placeholder="검색어를 입력하세요" value="<%= request.getParameter("searchTerm") != null ? request.getParameter("searchTerm") : "" %>"/>
+    <input type="submit" value="검색" />
+  </form>
+
   <table>
     <thead>
     <tr>
@@ -28,7 +34,15 @@
     <tbody>
     <%
       SubjectDAO dao = new SubjectDAO();
-      List<SubjectVO> list = dao.list();
+      String searchTerm = request.getParameter("searchTerm");
+      List<SubjectVO> list;
+
+      if (searchTerm != null && !searchTerm.isEmpty()) {
+        list = dao.list(searchTerm); // 검색어가 있을 때
+      } else {
+        list = dao.list(); // 검색어가 없을 때 모든 과목 조회
+      }
+
       for (SubjectVO vo : list) {
     %>
     <tr>
@@ -112,6 +126,31 @@
   }
   .wide-cell{
     width:30px;
+  }
+
+  .search-form {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .search-form input[type="text"] {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .search-form input[type="submit"] {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .search-form input[type="submit"]:hover {
+    background-color: #0056b3;
   }
 
   @media (max-width: 768px) {

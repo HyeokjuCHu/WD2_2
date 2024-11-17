@@ -39,15 +39,27 @@ public class SubjectDAO {
     }
 
 
-    // 모든 과목 조회
     public List<SubjectVO> list() {
-        List<SubjectVO> subjects = new ArrayList<>();
+        return list(null); // 검색어가 없을 때 모든 과목을 반환
+    }
+
+    public List<SubjectVO> list(String searchTerm) {
+        List<SubjectVO> subjectList = new ArrayList<>();
         String sql = "SELECT * FROM subjects";
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+
+        if (searchTerm != null && !searchTerm.isEmpty()) {
+            sql += " WHERE name LIKE ? OR code LIKE ?";
+        }
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            if (searchTerm != null && !searchTerm.isEmpty()) {
+                pstmt.setString(1, "%" + searchTerm + "%");
+                pstmt.setString(2, "%" + searchTerm + "%");
+            }
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 SubjectVO subject = new SubjectVO();
-                subject.setId(rs.getInt("id"));
+                subject.setId(rs.getInt("id")); // ID 가져오기
                 subject.setCategory(rs.getString("category"));
                 subject.setCode(rs.getString("code"));
                 subject.setName(rs.getString("name"));
@@ -58,13 +70,15 @@ public class SubjectDAO {
                 subject.setClassTime(rs.getString("classTime"));
                 subject.setClassRoom(rs.getString("classRoom"));
                 subject.setGrade(rs.getString("grade"));
-                subjects.add(subject);
+                // subject.setReEnrollment(rs.getBoolean("reEnrollment")); // 재수강 관련 필드 주석 처리
+                subjectList.add(subject);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return subjects;
+        return subjectList;
     }
+
 
     // 특정 과목 조회
     public SubjectVO get(int id) {
